@@ -31,8 +31,8 @@ violence_detection/
 
 1. Clone the repository:
 ```bash
-git clone <repository_url>
-cd violence_detection
+git clone https://github.com/anhnhust/3DCNN-Violence-Detection.git
+cd 3DCNN-Violence-Detection
 ```
 
 2. Install dependencies:
