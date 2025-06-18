@@ -42,16 +42,29 @@ def main():
         transforms.Lambda(lambda x: torch.FloatTensor(x))
     ])
     
-    # Create dataset
-    print("Loading dataset...")
+    # Create dataset with sliding window approach
+    print("Loading dataset with sliding window...")
     dataset = VideoDataset(
         data_path=config.data_path,
         sequence_length=config.sequence_length,
         img_size=config.img_size,
-        transform=transform
+        transform=transform,
+        stride=config.stride,
+        min_frames=config.min_frames
     )
     
+    # Print dataset information
+    dataset_info = dataset.get_dataset_info()
+    print("\n=== Dataset Information ===")
+    for key, value in dataset_info.items():
+        print(f"{key}: {value}")
+    print("=" * 30)
+    
     print(f"Total dataset size: {len(dataset)}")
+    
+    # Check class balance
+    violence_ratio = dataset_info['violence_sequences'] / dataset_info['total_sequences']
+    print(f"Class balance - Violence: {violence_ratio:.2%}, Non-violence: {1-violence_ratio:.2%}")
     
     # Split dataset
     dataset_size = len(dataset)
@@ -68,14 +81,16 @@ def main():
         train_dataset, 
         batch_size=config.batch_size, 
         shuffle=True, 
-        num_workers=config.num_workers
+        num_workers=config.num_workers,
+        pin_memory=True if device.type == 'cuda' else False
     )
     
     val_loader = DataLoader(
         val_dataset, 
         batch_size=config.batch_size, 
         shuffle=False, 
-        num_workers=config.num_workers
+        num_workers=config.num_workers,
+        pin_memory=True if device.type == 'cuda' else False
     )
     
     print(f"Dataset sizes - Train: {len(train_dataset)}, Val: {len(val_dataset)}, Test: {len(test_dataset)}")

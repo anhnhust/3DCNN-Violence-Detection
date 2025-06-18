@@ -10,7 +10,9 @@ def get_config():
     parser.add_argument('--data_path', type=str, default='data/', help='Path to dataset')
     parser.add_argument('--sequence_length', type=int, default=16, help='Number of frames per sequence')
     parser.add_argument('--img_size', type=tuple, default=(112, 112), help='Image size')
-    
+    parser.add_argument('--stride', type=int, default=16, help='Stride for sliding window')
+    parser.add_argument('--min_frames', type=int, default=16, help='Minimum frames required in video')
+
     # Training parameters
     parser.add_argument('--batch_size', type=int, default=8, help='Batch size')
     parser.add_argument('--learning_rate', type=float, default=0.001, help='Learning rate')
